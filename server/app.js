@@ -8,7 +8,8 @@ const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
 
 // variables
-var user = false;
+let user = false;
+let id;
 
 // initialize Firestore
 admin.initializeApp({
@@ -55,6 +56,18 @@ app.post("/login", function (req, res) {
     login(email, password, res);
 })
 
+// Post for index page
+app.post("/index", function (req, res) {
+    const phone = req.body.phone;
+    const date = req.body.date;
+    const message = req.body.message;
+
+    bookAppointment(phone, date, message).then(() => {
+        console.log('Booked successfully');
+        alert('Booked successfully');
+    });
+})
+
 // Add port
 app.listen(7000, () => {
     console.log("listen to port 7000");
@@ -87,6 +100,8 @@ async function login(email, password, res) {
             res.redirect('/index.html');
             console.log('redirect successfully');
             user = true;
+            id = doc.id;
+            console.log('doc.id -> ' + id);
         }
     });
     if (!user){
@@ -95,3 +110,20 @@ async function login(email, password, res) {
     }
 }
 
+// Book appointment Function to Book a new appointment
+async function bookAppointment(phone, date, message){
+    const userData = await db.collection('users').doc(id).get();
+
+    const data = {
+        UserId: id,
+        name: userData.data()['name'],
+        email: userData.data()['email'],
+        phone: phone,
+        date: date,
+        message: message,
+    };
+
+    await db.collection('Appointment').add(data);
+}
+
+console.log('id -> ' + id)
