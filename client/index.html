@@ -376,22 +376,14 @@ https://templatemo.com/tm-566-medic-care
                                 
                                 <h2 class="text-center mb-lg-3 mb-2">Book an appointment</h2>
                             
-                                <form role="form" action="#booking" method="post">
+                                <form role="form" action="/index" method="post">
                                     <div class="row">
                                         <div class="col-lg-6 col-12">
-                                            <input type="text" name="name" id="name" class="form-control" placeholder="Full name" required>
+                                            <input type="telephone" name="phone" id="phone" pattern="0[0-9]{10}" class="form-control" placeholder="Phone: 123-456-7890" required>
                                         </div>
 
                                         <div class="col-lg-6 col-12">
-                                            <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Email address" required>
-                                        </div>
-
-                                        <div class="col-lg-6 col-12">
-                                            <input type="telephone" name="phone" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" placeholder="Phone: 123-456-7890">
-                                        </div>
-
-                                        <div class="col-lg-6 col-12">
-                                            <input type="date" name="date" id="date" value="" class="form-control">
+                                            <input type="date" name="date" id="date" value="" class="form-control" required>
                                             
                                         </div>
 
