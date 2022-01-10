@@ -8,7 +8,8 @@ const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
 
 // variables
-let user = false;
+let isUser = false;
+let isUserFP = false;
 let id;
 
 // initialize Firestore
@@ -68,6 +69,15 @@ app.post("/home", function (req, res) {
     });
 })
 
+// Post for forget password page
+app.post("/forget_password", function (req, res) {
+    const code = req.body.code;
+    const email = req.body.email;
+    const password = req.body.password;
+
+    forgetPassword(email, password, res);
+})
+
 // Add port
 app.listen(7000, () => {
     console.log("listen to port 7000");
@@ -99,12 +109,12 @@ async function login(email, password, res) {
             console.log('Login successfully');
             res.redirect('/home.html');
             console.log('redirect successfully');
-            user = true;
+            isUser = true;
             id = doc.id;
             console.log('doc.id -> ' + id);
         }
     });
-    if (!user){
+    if (!isUser){
         alert("Not a User");
         console.log('not user');
     }
@@ -124,6 +134,24 @@ async function bookAppointment(phone, date, message){
     };
 
     await db.collection('Appointment').add(data);
+}
+
+async function forgetPassword(email, password, res) {
+    const snapshot = await db.collection('users').get();
+    snapshot.forEach((doc) => {
+        if (doc.data()['email'] === email) {
+            doc.ref.update({password: password});
+            console.log('password change successfully');
+            res.redirect('/login.html');
+            console.log('redirect successfully');
+            isUserFP = true;
+            alert('password change successfully');
+        }
+    });
+    if (!isUserFP){
+        alert("Not a User");
+        console.log('not user');
+    }
 }
 
 console.log('id -> ' + id)
