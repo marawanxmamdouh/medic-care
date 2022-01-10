@@ -56,8 +56,8 @@ app.post("/login", function (req, res) {
     login(email, password, res);
 })
 
-// Post for index page
-app.post("/index", function (req, res) {
+// Post for home page
+app.post("/home", function (req, res) {
     const phone = req.body.phone;
     const date = req.body.date;
     const message = req.body.message;
@@ -97,7 +97,7 @@ async function login(email, password, res) {
         // console.log(doc.id, '=>', doc.data());
         if (doc.data()['email'] === email && doc.data()['password'] === password) {
             console.log('Login successfully');
-            res.redirect('/index.html');
+            res.redirect('/home.html');
             console.log('redirect successfully');
             user = true;
             id = doc.id;
