@@ -1,10 +1,14 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+let alert = require('alert');
 
 // firestore modules
 const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
+
+// variables
+var user = false;
 
 // initialize Firestore
 admin.initializeApp({
@@ -41,6 +45,16 @@ app.post("/register", function (req, res) {
     });
 })
 
+// Post to login page
+app.post("/login", function (req, res) {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    console.log(email)
+    console.log(password)
+    login(email, password, res);
+})
+
 // Add port
 app.listen(7000, () => {
     console.log("listen to port 7000");
@@ -61,5 +75,23 @@ async function register(name, email, password) {
     };
 
     await db.collection('users').add(data);
+}
+
+// Login Function to sign in
+async function login(email, password, res) {
+    const snapshot = await db.collection('users').get();
+    snapshot.forEach((doc) => {
+        // console.log(doc.id, '=>', doc.data());
+        if (doc.data()['email'] === email && doc.data()['password'] === password) {
+            console.log('Login successfully');
+            res.redirect('/index.html');
+            console.log('redirect successfully');
+            user = true;
+        }
+    });
+    if (!user){
+        alert("Not a User");
+        console.log('not user');
+    }
 }
 
