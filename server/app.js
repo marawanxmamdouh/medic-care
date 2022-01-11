@@ -22,6 +22,7 @@ const db = admin.firestore();
 
 // make express object
 const app = express();
+app.set("view engine", "ejs")
 
 // add static directory
 app.use(express.static(path.resolve(__dirname + '/../client/')));
@@ -76,6 +77,11 @@ app.post("/forget_password", function (req, res) {
     const password = req.body.password;
 
     forgetPassword(email, password, res);
+})
+
+// Get Booked appointments in UI
+app.get("/appointment", function (req,res) {
+    res.render('appointment', {user: 'maro data'})
 })
 
 // Add port
