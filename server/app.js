@@ -11,6 +11,7 @@ const serviceAccount = require("./serviceAccountKey.json");
 let isUser = false;
 let isUserFP = false;
 let id;
+let numUsers;
 
 // initialize Firestore
 admin.initializeApp({
@@ -81,7 +82,7 @@ app.post("/forget_password", function (req, res) {
 
 // Get Booked appointments in UI
 app.get("/appointment", function (req,res) {
-    res.render('appointment', {user: 'maro data'})
+    res.render('appointment', {users: numUsers})
 })
 
 // Add port
@@ -160,4 +161,18 @@ async function forgetPassword(email, password, res) {
     }
 }
 
+async function countUsers(){
+    db.collection('Appointment').onSnapshot(docSnapshot=>{
+        docSnapshot.forEach((doc)=>{
+            // if (doc.data()['UserId'] === id) {
+            //     numUsers.append(doc)
+            //     console.log(numUsers)
+            // }
+            numUsers = docSnapshot;
+        });
+    });
+
+}
 console.log('id -> ' + id)
+
+countUsers()
